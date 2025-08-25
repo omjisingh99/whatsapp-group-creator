@@ -1,0 +1,4 @@
+uploads/
+session/
+node_modules/
+.env
