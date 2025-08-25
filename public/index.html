@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WhatsApp Group Creator</title>
+</head>
+<body>
+  <h2>📲 Scan QR Code</h2>
+  <img id="qr" width="300" />
+  <hr />
+  <h3>Create Group</h3>
+  <form id="groupForm">
+    <input type="text" name="groupName" placeholder="Group Name" required><br><br>
+    <input type="file" name="file" accept=".csv" required><br><br>
+    <button type="submit">Create Group</button>
+  </form>
+  <div id="response"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
