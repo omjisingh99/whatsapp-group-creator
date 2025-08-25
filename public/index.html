@@ -1,23 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WhatsApp Group Creator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
-      background: #f9f9f9;
+      margin: 30px;
+      background: #f4f4f4;
     }
-    h1 {
-      color: #075E54;
-    }
+    #qr { margin: 20px 0; }
     form {
-      margin-top: 20px;
+      background: #fff;
       padding: 20px;
-      background: white;
       border-radius: 8px;
       max-width: 400px;
       box-shadow: 0 0 10px #ccc;
@@ -26,140 +20,34 @@
       width: 100%;
       padding: 12px;
       margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      font-size: 16px;
     }
     button {
       background: #25D366;
       border: none;
       color: white;
-      cursor: pointer;
       font-weight: bold;
-    }
-    button:hover {
-      background: #128C7E;
-    }
-    #qr {
-      margin-top: 30px;
-      max-width: 300px;
-    }
-    #status {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #333;
     }
   </style>
 </head>
 <body>
-  <h1>WhatsApp Group Creator</h1>
 
-  <div id="qr-container" style="display:none;">
-    <p>Scan QR Code with WhatsApp to login:</p>
-    <img id="qr" src="" alt="WhatsApp QR Code" />
-  </div>
+<h2>WhatsApp Group Creator</h2>
 
-  <div id="status"></div>
+<div id="qr-section">
+  <p>Scan this QR with your WhatsApp:</p>
+  <img id="qr" src="" width="300" />
+</div>
 
-  <form id="groupForm" enctype="multipart/form-data">
-    <input
-      type="text"
-      id="groupName"
-      name="groupName"
-      placeholder="Enter Group Name"
-      required
-    />
-    <input
-      type="file"
-      id="file"
-      name="file"
-      accept=".txt,.csv"
-      required
-    />
-    <button type="submit">Create Group</button>
-  </form>
+<p id="status"></p>
 
-  <!-- Socket.io client script -->
-  <script src="/socket.io/socket.io.js"></script>
+<form id="groupForm">
+  <input type="text" id="groupName" name="groupName" placeholder="Enter Group Name" required />
+  <input type="file" id="file" name="file" accept=".txt,.csv" required />
+  <button type="submit">Create Group</button>
+</form>
 
-  <script>
-    const socket = io();
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
 
-    const qrContainer = document.getElementById('qr-container');
-    const qrImage = document.getElementById('qr');
-    const statusDiv = document.getElementById('status');
-    const form = document.getElementById('groupForm');
-
-    // Listen for QR code from server
-    socket.on('qr', (qr) => {
-      qrContainer.style.display = 'block';
-      qrImage.src = qr;
-      statusDiv.textContent = 'Please scan the QR code with WhatsApp';
-    });
-
-    // WhatsApp ready
-    socket.on('ready', () => {
-      qrContainer.style.display = 'none';
-      statusDiv.textContent = 'WhatsApp is ready! You can now create groups.';
-    });
-
-    // WhatsApp authenticated
-    socket.on('authenticated', () => {
-      statusDiv.textContent = 'WhatsApp authenticated successfully.';
-    });
-
-    // WhatsApp auth failure
-    socket.on('auth_failure', () => {
-      statusDiv.textContent = 'Authentication failed. Please restart and scan QR again.';
-      qrContainer.style.display = 'block';
-    });
-
-    // Incoming messages for status update
-    socket.on('message', (msg) => {
-      statusDiv.textContent = msg;
-    });
-
-    // Handle form submit
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const groupName = document.getElementById('groupName').value.trim();
-      const fileInput = document.getElementById('file');
-      const file = fileInput.files[0];
-
-      if (!groupName) {
-        alert('Please enter group name');
-        return;
-      }
-
-      if (!file) {
-        alert('Please select a file');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('groupName', groupName);
-      formData.append('file', file);
-
-      statusDiv.textContent = 'Creating group... Please wait.';
-
-      try {
-        const response = await fetch('/api/group/create', {
-          method: 'POST',
-          body: formData,
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          statusDiv.textContent = data.message || 'Group created successfully!';
-        } else {
-          statusDiv.textContent = data.error || 'Error creating group';
-        }
-      } catch (error) {
-        statusDiv.textContent = 'Network error: ' + error.message;
-      }
-    });
-  </script>
 </body>
 </html>
